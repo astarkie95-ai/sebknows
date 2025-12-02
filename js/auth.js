@@ -154,4 +154,5 @@ const Auth = new AuthSystem();
 // Update user menu on page load
 document.addEventListener('DOMContentLoaded', () => {
     Auth.updateUserMenu();
+
 });
