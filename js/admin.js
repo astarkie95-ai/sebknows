@@ -407,4 +407,5 @@ function showNotification(message, type = 'success') {
         notification.style.animation = 'slideOut 0.3s ease';
         setTimeout(() => notification.remove(), 300);
     }, 3000);
+
 }
