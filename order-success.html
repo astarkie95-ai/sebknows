@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Confirmed - SebKnowsIRL</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-content">
+                <a href="index.html" class="logo">
+                    <img src="images/logo.png" alt="SebKnowsIRL Logo" class="logo-large">
+                    <span class="logo-text">SebKnows<span class="irl">IRL</span></span>
+                </a>
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="shop.html">Shop</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Success Section -->
+    <section class="success-section">
+        <div class="hero-bg"></div>
+        <div class="container" style="position: relative; z-index: 10;">
+            <div class="success-card">
+                <div class="success-icon">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <h1>Order Confirmed!</h1>
+                <p class="success-message">Thank you for your purchase. Your order has been received and is being processed.</p>
+                
+                <div class="order-details-card">
+                    <h2>Order Details</h2>
+                    <div class="order-info-grid">
+                        <div class="order-info-item">
+                            <span class="label">Order Number:</span>
+                            <span class="value" id="order-number">...</span>
+                        </div>
+                        <div class="order-info-item">
+                            <span class="label">Tracking Number:</span>
+                            <span class="value tracking-number" id="tracking-number">...</span>
+                        </div>
+                        <div class="order-info-item">
+                            <span class="label">Total Amount:</span>
+                            <span class="value" id="order-total">...</span>
+                        </div>
+                        <div class="order-info-item">
+                            <span class="label">Estimated Delivery:</span>
+                            <span class="value" id="delivery-date">...</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="order-items-card">
+                    <h2>Items Ordered</h2>
+                    <div id="order-items-list">
+                        <!-- Items will be loaded here -->
+                    </div>
+                </div>
+
+                <div class="shipping-card">
+                    <h2>Shipping Address</h2>
+                    <div id="shipping-address">
+                        <!-- Address will be loaded here -->
+                    </div>
+                </div>
+
+                <div class="success-actions">
+                    <a href="track-order.html" class="btn btn-primary">
+                        <i class="fas fa-shipping-fast"></i>
+                        Track Order
+                    </a>
+                    <a href="shop.html" class="btn btn-outline">
+                        <i class="fas fa-store"></i>
+                        Continue Shopping
+                    </a>
+                </div>
+
+                <div class="email-notice">
+                    <i class="fas fa-envelope"></i>
+                    <p>A confirmation email has been sent to <strong id="order-email">...</strong></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="js/auth.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const orderData = JSON.parse(localStorage.getItem('last_order') || '{}');
+            
+            if (!orderData.id) {
+                window.location.href = 'index.html';
+                return;
+            }
+            
+            // Display order details
+            document.getElementById('order-number').textContent = `#${orderData.id}`;
+            document.getElementById('tracking-number').textContent = orderData.trackingNumber;
+            document.getElementById('order-total').textContent = `£${orderData.total.toFixed(2)}`;
+            document.getElementById('order-email').textContent = orderData.shipping.email;
+            
+            // Calculate delivery date
+            const deliveryDays = orderData.shippingMethod === 'next-day' ? 1 : 
+                               orderData.shippingMethod === 'express' ? 3 : 7;
+            const deliveryDate = new Date();
+            deliveryDate.setDate(deliveryDate.getDate() + deliveryDays);
+            document.getElementById('delivery-date').textContent = deliveryDate.toLocaleDateString('en-GB', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+            
+            // Display items
+            const itemsList = document.getElementById('order-items-list');
+            itemsList.innerHTML = orderData.items.map(item => `
+                <div class="success-order-item">
+                    <img src="${item.image}" alt="${item.name}">
+                    <div class="item-details">
+                        <h4>${item.name}</h4>
+                        <p>Quantity: ${item.quantity}</p>
+                        ${item.size ? `<p>Size: ${item.size}</p>` : ''}
+                        ${item.color ? `<p>Color: ${item.color}</p>` : ''}
+                    </div>
+                    <div class="item-price">£${(item.price * item.quantity).toFixed(2)}</div>
+                </div>
+            `).join('');
+            
+            // Display shipping address
+            const shippingDiv = document.getElementById('shipping-address');
+            shippingDiv.innerHTML = `
+                <p><strong>${orderData.shipping.firstName} ${orderData.shipping.lastName}</strong></p>
+                <p>${orderData.shipping.address1}</p>
+                ${orderData.shipping.address2 ? `<p>${orderData.shipping.address2}</p>` : ''}
+                <p>${orderData.shipping.city}, ${orderData.shipping.postcode}</p>
+                <p>${orderData.shipping.country}</p>
+                <p>Phone: ${orderData.shipping.phone}</p>
+            `;
+        });
+    </script>
+</body>
+</html>

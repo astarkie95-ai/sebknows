@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - SebKnowsIRL</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-content">
+                <a href="index.html" class="logo">
+                    <img src="images/logo.png" alt="SebKnowsIRL Logo">
+                    <span class="logo-text">SebKnows<span class="irl">IRL</span></span>
+                </a>
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="shop.html">Shop</a></li>
+                    <li><a href="about.html">About</a></li>
+                </ul>
+                <button class="mobile-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Register Section -->
+    <section class="auth-section">
+        <div class="hero-bg" style="z-index: 1;"></div>
+        <div class="container" style="position: relative; z-index: 10;">
+            <div class="auth-container">
+                <div class="auth-card">
+                    <div class="auth-header">
+                        <img src="images/logo.png" alt="Logo" class="auth-logo">
+                        <h2>Join the Community</h2>
+                        <p>Create your account to start shopping</p>
+                    </div>
+                    
+                    <form id="register-form" class="auth-form">
+                        <div class="form-group">
+                            <label for="name">
+                                <i class="fas fa-user"></i>
+                                Full Name
+                            </label>
+                            <input type="text" id="name" name="name" required placeholder="John Doe" autocomplete="name">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="email">
+                                <i class="fas fa-envelope"></i>
+                                Email Address
+                            </label>
+                            <input type="email" id="email" name="email" required placeholder="your@email.com" autocomplete="email">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="password">
+                                <i class="fas fa-lock"></i>
+                                Password
+                            </label>
+                            <input type="password" id="password" name="password" required placeholder="Min. 6 characters" autocomplete="new-password">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="confirm-password">
+                                <i class="fas fa-lock"></i>
+                                Confirm Password
+                            </label>
+                            <input type="password" id="confirm-password" name="confirm-password" required placeholder="Re-enter password" autocomplete="new-password">
+                        </div>
+                        
+                        <div class="form-options">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="terms" name="terms" required>
+                                <span>I agree to the Terms & Conditions</span>
+                            </label>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary btn-block">
+                            <i class="fas fa-user-plus"></i>
+                            Create Account
+                        </button>
+                        
+                        <div class="auth-divider">
+                            <span>OR</span>
+                        </div>
+                        
+                        <button type="button" class="btn btn-secondary btn-block" onclick="window.location.href='login.html'">
+                            <i class="fas fa-sign-in-alt"></i>
+                            Already have an account? Login
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="js/auth.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('register-form');
+            const nameInput = document.getElementById('name');
+            const emailInput = document.getElementById('email');
+            const passwordInput = document.getElementById('password');
+            const confirmPasswordInput = document.getElementById('confirm-password');
+            const termsInput = document.getElementById('terms');
+            
+            // Ensure inputs are focusable
+            [nameInput, emailInput, passwordInput, confirmPasswordInput, termsInput].forEach(input => {
+                if (input) input.style.pointerEvents = 'auto';
+            });
+            
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const name = nameInput.value.trim();
+                const email = emailInput.value.trim();
+                const password = passwordInput.value.trim();
+                const confirmPassword = confirmPasswordInput.value.trim();
+                const termsAccepted = termsInput.checked;
+                
+                console.log('Registration attempt:', email); // Debug
+                
+                if (!name || !email || !password || !confirmPassword) {
+                    alert('Please fill in all fields!');
+                    return;
+                }
+                
+                if (!termsAccepted) {
+                    alert('Please accept the Terms & Conditions!');
+                    return;
+                }
+                
+                if (password !== confirmPassword) {
+                    alert('Passwords do not match!');
+                    return;
+                }
+                
+                if (password.length < 6) {
+                    alert('Password must be at least 6 characters!');
+                    return;
+                }
+                
+                if (Auth.register(name, email, password)) {
+                    alert('Account created successfully! You can now login.');
+                    window.location.href = 'login.html';
+                } else {
+                    alert('Email already exists! Please use a different email or login.');
+                }
+            });
+            
+            // Mobile menu
+            const mobileToggle = document.querySelector('.mobile-toggle');
+            const navLinks = document.querySelector('.nav-links');
+            
+            if (mobileToggle && navLinks) {
+                mobileToggle.addEventListener('click', () => {
+                    navLinks.classList.toggle('active');
+                });
+            }
+        });
+    </script>
+</body>
+</html>

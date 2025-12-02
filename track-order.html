@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Track Order - SebKnowsIRL</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-content">
+                <a href="index.html" class="logo">
+                    <img src="images/logo.png" alt="SebKnowsIRL Logo" class="logo-large">
+                    <span class="logo-text">SebKnows<span class="irl">IRL</span></span>
+                </a>
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="shop.html">Shop</a></li>
+                    <li><a href="cart.html">Cart</a></li>
+                </ul>
+                <div class="nav-actions">
+                    <div class="user-menu" id="user-menu"></div>
+                    <button class="mobile-toggle">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Track Order Section -->
+    <section class="track-section">
+        <div class="hero-bg"></div>
+        <div class="container" style="position: relative; z-index: 10;">
+            <h1 class="page-title">Track Your Order</h1>
+            
+            <div class="track-search-card">
+                <p>Enter your tracking number to see the latest updates on your order.</p>
+                <div class="track-search">
+                    <input type="text" id="tracking-input" placeholder="Enter tracking number (e.g., SK12345678)">
+                    <button class="btn btn-primary" onclick="trackOrder()">
+                        <i class="fas fa-search"></i>
+                        Track
+                    </button>
+                </div>
+            </div>
+
+            <div id="tracking-result" style="display: none;">
+                <div class="tracking-card">
+                    <div class="tracking-header">
+                        <h2>Order #<span id="result-order-id"></span></h2>
+                        <span class="tracking-status" id="result-status"></span>
+                    </div>
+                    
+                    <div class="tracking-timeline">
+                        <div class="timeline-item completed">
+                            <div class="timeline-icon">
+                                <i class="fas fa-check"></i>
+                            </div>
+                            <div class="timeline-content">
+                                <h4>Order Placed</h4>
+                                <p id="date-placed"></p>
+                            </div>
+                        </div>
+                        
+                        <div class="timeline-item" id="timeline-processing">
+                            <div class="timeline-icon">
+                                <i class="fas fa-box"></i>
+                            </div>
+                            <div class="timeline-content">
+                                <h4>Processing</h4>
+                                <p>Preparing your items</p>
+                            </div>
+                        </div>
+                        
+                        <div class="timeline-item" id="timeline-shipped">
+                            <div class="timeline-icon">
+                                <i class="fas fa-shipping-fast"></i>
+                            </div>
+                            <div class="timeline-content">
+                                <h4>Shipped</h4>
+                                <p>On the way to you</p>
+                            </div>
+                        </div>
+                        
+                        <div class="timeline-item" id="timeline-delivered">
+                            <div class="timeline-icon">
+                                <i class="fas fa-home"></i>
+                            </div>
+                            <div class="timeline-content">
+                                <h4>Delivered</h4>
+                                <p>Package delivered</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tracking-details">
+                        <div class="detail-row">
+                            <span class="detail-label">Tracking Number:</span>
+                            <span class="detail-value" id="result-tracking"></span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Shipping Method:</span>
+                            <span class="detail-value" id="result-shipping-method"></span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Estimated Delivery:</span>
+                            <span class="detail-value" id="result-delivery-date"></span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Shipping Address:</span>
+                            <span class="detail-value" id="result-address"></span>
+                        </div>
+                    </div>
+
+                    <div class="tracking-items">
+                        <h3>Items in this order</h3>
+                        <div id="result-items"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="tracking-error" class="error-message" style="display: none;">
+                <i class="fas fa-exclamation-circle"></i>
+                <p>No order found with that tracking number. Please check and try again.</p>
+            </div>
+        </div>
+    </section>
+
+    <script src="js/auth.js"></script>
+    <script src="js/cart.js"></script>
+    <script>
+        // Auto-load if coming from success page
+        document.addEventListener('DOMContentLoaded', function() {
+            const lastOrder = JSON.parse(localStorage.getItem('last_order') || '{}');
+            if (lastOrder.trackingNumber) {
+                document.getElementById('tracking-input').value = lastOrder.trackingNumber;
+                trackOrder();
+            }
+        });
+
+        function trackOrder() {
+            const trackingNumber = document.getElementById('tracking-input').value.trim();
+            
+            if (!trackingNumber) {
+                alert('Please enter a tracking number');
+                return;
+            }
+            
+            // Find order
+            const orders = JSON.parse(localStorage.getItem('sebknows_orders') || '[]');
+            const order = orders.find(o => o.trackingNumber === trackingNumber);
+            
+            const resultDiv = document.getElementById('tracking-result');
+            const errorDiv = document.getElementById('tracking-error');
+            
+            if (!order) {
+                resultDiv.style.display = 'none';
+                errorDiv.style.display = 'block';
+                return;
+            }
+            
+            // Show result
+            resultDiv.style.display = 'block';
+            errorDiv.style.display = 'none';
+            
+            // Fill in details
+            document.getElementById('result-order-id').textContent = order.id;
+            document.getElementById('result-status').textContent = order.status.toUpperCase();
+            document.getElementById('result-status').className = `tracking-status status-${order.status}`;
+            document.getElementById('result-tracking').textContent = order.trackingNumber;
+            document.getElementById('date-placed').textContent = new Date(order.date).toLocaleDateString('en-GB');
+            
+            // Shipping method
+            const shippingMethods = {
+                'standard': 'Standard Shipping (5-7 days)',
+                'express': 'Express Shipping (2-3 days)',
+                'next-day': 'Next Day Delivery'
+            };
+            document.getElementById('result-shipping-method').textContent = shippingMethods[order.shippingMethod] || order.shippingMethod;
+            
+            // Delivery date
+            const deliveryDays = order.shippingMethod === 'next-day' ? 1 : 
+                               order.shippingMethod === 'express' ? 3 : 7;
+            const deliveryDate = new Date(order.date);
+            deliveryDate.setDate(deliveryDate.getDate() + deliveryDays);
+            document.getElementById('result-delivery-date').textContent = deliveryDate.toLocaleDateString('en-GB');
+            
+            // Address
+            document.getElementById('result-address').textContent = 
+                `${order.shipping.address1}, ${order.shipping.city}, ${order.shipping.postcode}`;
+            
+            // Items
+            document.getElementById('result-items').innerHTML = order.items.map(item => `
+                <div class="track-item">
+                    <img src="${item.image}" alt="${item.name}">
+                    <div>
+                        <h4>${item.name}</h4>
+                        <p>Quantity: ${item.quantity}</p>
+                    </div>
+                </div>
+            `).join('');
+            
+            // Update timeline
+            updateTimeline(order.status);
+        }
+        
+        function updateTimeline(status) {
+            const statuses = ['pending', 'processing', 'shipped', 'delivered'];
+            const currentIndex = statuses.indexOf(status);
+            
+            // Mark completed stages
+            if (currentIndex >= 1) {
+                document.getElementById('timeline-processing').classList.add('completed');
+            }
+            if (currentIndex >= 2) {
+                document.getElementById('timeline-shipped').classList.add('completed');
+            }
+            if (currentIndex >= 3) {
+                document.getElementById('timeline-delivered').classList.add('completed');
+            }
+            
+            // Mark active stage
+            if (currentIndex >= 0 && currentIndex < 4) {
+                const timelineItems = ['timeline-placed', 'timeline-processing', 'timeline-shipped', 'timeline-delivered'];
+                if (document.getElementById(timelineItems[currentIndex])) {
+                    document.getElementById(timelineItems[currentIndex]).classList.add('active');
+                }
+            }
+        }
+    </script>
+</body>
+</html>

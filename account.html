@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Account - SebKnowsIRL</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-content">
+                <a href="index.html" class="logo">
+                    <img src="images/logo.png" alt="SebKnowsIRL Logo">
+                    <span class="logo-text">SebKnows<span class="irl">IRL</span></span>
+                </a>
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="shop.html">Shop</a></li>
+                    <li><a href="about.html">About</a></li>
+                </ul>
+                <div class="nav-actions">
+                    <div class="user-menu" id="user-menu"></div>
+                    <a href="cart.html" class="cart-btn">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="cart-count">0</span>
+                    </a>
+                    <button class="mobile-toggle">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Account Section -->
+    <section class="account-section">
+        <div class="hero-bg" style="z-index: 1;"></div>
+        <div class="container" style="position: relative; z-index: 10;">
+            <div class="account-header">
+                <h1>My Account</h1>
+                <p>Welcome back, <span id="user-name"></span>!</p>
+            </div>
+
+            <div class="account-grid">
+                <!-- Profile Card -->
+                <div class="account-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-user-circle"></i> Profile Information</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="info-row">
+                            <span class="info-label">Name:</span>
+                            <span class="info-value" id="profile-name"></span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Email:</span>
+                            <span class="info-value" id="profile-email"></span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Member Since:</span>
+                            <span class="info-value" id="profile-date"></span>
+                        </div>
+                        <button class="btn btn-outline btn-small" onclick="alert('Profile editing coming soon!')">
+                            <i class="fas fa-edit"></i> Edit Profile
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Orders Card -->
+                <div class="account-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-box"></i> Recent Orders</h3>
+                    </div>
+                    <div class="card-body" id="orders-list">
+                        <div class="empty-state">
+                            <i class="fas fa-shopping-bag"></i>
+                            <p>No orders yet</p>
+                            <a href="shop.html" class="btn btn-primary btn-small">Start Shopping</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Wishlist Card -->
+                <div class="account-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-heart"></i> Wishlist</h3>
+                    </div>
+                    <div class="card-body" id="wishlist-container">
+                        <div class="empty-state">
+                            <i class="fas fa-heart-broken"></i>
+                            <p>Your wishlist is empty</p>
+                            <a href="shop.html" class="btn btn-outline btn-small">Browse Products</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions Card -->
+                <div class="account-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-bolt"></i> Quick Actions</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="action-buttons">
+                            <a href="cart.html" class="action-btn">
+                                <i class="fas fa-shopping-cart"></i>
+                                <span>View Cart</span>
+                            </a>
+                            <a href="shop.html" class="action-btn">
+                                <i class="fas fa-store"></i>
+                                <span>Browse Shop</span>
+                            </a>
+                            <a href="#" class="action-btn" onclick="alert('Track order feature coming soon!'); return false;">
+                                <i class="fas fa-shipping-fast"></i>
+                                <span>Track Order</span>
+                            </a>
+                            <a href="#" class="action-btn" onclick="alert('Support feature coming soon!'); return false;">
+                                <i class="fas fa-headset"></i>
+                                <span>Get Support</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <img src="images/logo.png" alt="SebKnowsIRL Logo" class="footer-logo">
+                    <p>Premium YouTube merchandise for the IRL community</p>
+                    <div class="social-links">
+                        <a href="https://youtube.com/@SebKnowsIRL" target="_blank"><i class="fab fa-youtube"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-tiktok"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="shop.html">Shop</a></li>
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="#">Shipping Info</a></li>
+                        <li><a href="#">Returns</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Support</h4>
+                    <ul>
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Size Guide</a></li>
+                        <li><a href="#">Track Order</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Newsletter</h4>
+                    <p>Get updates on new drops</p>
+                    <form class="newsletter-form">
+                        <input type="email" placeholder="Your email" required>
+                        <button type="submit"><i class="fas fa-paper-plane"></i></button>
+                    </form>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 SebKnowsIRL. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/auth.js"></script>
+    <script src="js/cart.js"></script>
+    <script>
+        // Check if user is logged in
+        if (!Auth.isLoggedIn()) {
+            window.location.href = 'login.html';
+        }
+
+        const user = Auth.getCurrentUser();
+        document.getElementById('user-name').textContent = user.name;
+        document.getElementById('profile-name').textContent = user.name;
+        document.getElementById('profile-email').textContent = user.email;
+        document.getElementById('profile-date').textContent = new Date(user.createdAt).toLocaleDateString();
+
+        // Load orders from localStorage
+        const orders = JSON.parse(localStorage.getItem('sebknows_orders') || '[]');
+        const userOrders = orders.filter(order => order.userId === user.id);
+
+        if (userOrders.length > 0) {
+            const ordersList = document.getElementById('orders-list');
+            ordersList.innerHTML = userOrders.slice(0, 3).map(order => `
+                <div class="order-item">
+                    <div class="order-header">
+                        <span class="order-id">Order #${order.id}</span>
+                        <span class="order-status status-${order.status}">${order.status}</span>
+                    </div>
+                    <div class="order-details">
+                        <span>${order.items.length} items</span>
+                        <span class="order-total">£${order.total.toFixed(2)}</span>
+                    </div>
+                    <div class="order-date">${new Date(order.date).toLocaleDateString()}</div>
+                </div>
+            `).join('');
+        }
+
+        // Load wishlist
+        const wishlist = JSON.parse(localStorage.getItem('sebknows_wishlist') || '[]');
+        const products = JSON.parse(localStorage.getItem('sebknows_products') || '[]');
+        
+        if (wishlist.length > 0) {
+            const wishlistProducts = products.filter(p => wishlist.includes(p.id));
+            const wishlistContainer = document.getElementById('wishlist-container');
+            
+            if (wishlistProducts.length > 0) {
+                wishlistContainer.innerHTML = wishlistProducts.slice(0, 3).map(product => `
+                    <div class="wishlist-item" style="display: flex; align-items: center; gap: 1rem; padding: 1rem; background: var(--dark); border-radius: 10px; margin-bottom: 1rem;">
+                        <img src="${product.image}" alt="${product.name}" style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px;">
+                        <div style="flex: 1;">
+                            <h4 style="margin: 0; font-size: 1rem;">${product.name}</h4>
+                            <p style="margin: 0.5rem 0 0 0; color: var(--primary); font-weight: bold;">£${product.price.toFixed(2)}</p>
+                        </div>
+                        <a href="shop.html" class="btn btn-primary btn-small">
+                            <i class="fas fa-shopping-cart"></i>
+                        </a>
+                    </div>
+                `).join('');
+            }
+        }
+
+        // Mobile menu
+        const mobileToggle = document.querySelector('.mobile-toggle');
+        const navLinks = document.querySelector('.nav-links');
+        
+        if (mobileToggle && navLinks) {
+            mobileToggle.addEventListener('click', () => {
+                navLinks.classList.toggle('active');
+            });
+        }
+    </script>
+</body>
+</html>

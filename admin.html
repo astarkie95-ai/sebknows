@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - SebKnowsIRL</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Admin Nav with ALL Links -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-content">
+                <a href="index.html" class="logo">
+                    <img src="images/logo.png" alt="SebKnowsIRL Logo">
+                    <span class="logo-text">Admin<span class="irl"> Panel</span></span>
+                </a>
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="shop.html">Shop</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="admin.html" class="active">Dashboard</a></li>
+                </ul>
+                <div class="nav-actions">
+                    <span style="color: var(--text); margin-right: 1rem;">
+                        <i class="fas fa-crown" style="color: gold;"></i>
+                        <span id="admin-name"></span>
+                    </span>
+                    <button class="btn btn-small btn-outline" onclick="Auth.logout()">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                    <button class="mobile-toggle">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Admin Dashboard -->
+    <section class="admin-dashboard">
+        <div class="hero-bg"></div>
+        <div class="container">
+            <div class="admin-header">
+                <h1><i class="fas fa-tachometer-alt"></i> Store Dashboard</h1>
+                <p>Manage your products, orders, and settings</p>
+            </div>
+
+            <!-- Stats -->
+            <div class="admin-stats">
+                <div class="stat-box">
+                    <i class="fas fa-box"></i>
+                    <div>
+                        <h3 id="total-products">0</h3>
+                        <p>Total Products</p>
+                    </div>
+                </div>
+                <div class="stat-box">
+                    <i class="fas fa-check-circle"></i>
+                    <div>
+                        <h3 id="active-products">0</h3>
+                        <p>In Stock</p>
+                    </div>
+                </div>
+                <div class="stat-box">
+                    <i class="fas fa-shopping-cart"></i>
+                    <div>
+                        <h3 id="total-orders">0</h3>
+                        <p>Total Orders</p>
+                    </div>
+                </div>
+                <div class="stat-box">
+                    <i class="fas fa-pound-sign"></i>
+                    <div>
+                        <h3 id="total-revenue">£0</h3>
+                        <p>Total Revenue</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Site Settings Card -->
+            <div class="admin-section">
+                <div class="section-header-admin">
+                    <h2><i class="fas fa-cog"></i> Site Settings</h2>
+                    <button class="btn btn-secondary" onclick="showSettingsModal()">
+                        <i class="fas fa-edit"></i> Edit Settings
+                    </button>
+                </div>
+                <div class="settings-preview">
+                    <div class="setting-item">
+                        <span class="setting-label">Channel Stats:</span>
+                        <span id="stats-preview-text">Manual Mode</span>
+                    </div>
+                    <div class="setting-item">
+                        <span class="setting-label">About Page Image:</span>
+                        <button class="btn btn-small btn-outline" onclick="changeAboutImage()">
+                            <i class="fas fa-image"></i> Change Image
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product Management -->
+            <div class="admin-section">
+                <div class="section-header-admin">
+                    <h2><i class="fas fa-tags"></i> Product Management</h2>
+                    <button class="btn btn-primary" onclick="showAddProductModal()">
+                        <i class="fas fa-plus"></i> Add New Product
+                    </button>
+                </div>
+
+                <div class="products-table-container">
+                    <table id="products-table">
+                        <thead>
+                            <tr>
+                                <th>Image</th>
+                                <th>Name</th>
+                                <th>Category</th>
+                                <th>Price</th>
+                                <th>Stock</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="products-tbody">
+                            <!-- Products will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Orders Management -->
+            <div class="admin-section">
+                <div class="section-header-admin">
+                    <h2><i class="fas fa-shopping-bag"></i> Recent Orders</h2>
+                </div>
+
+                <div class="orders-table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Customer</th>
+                                <th>Items</th>
+                                <th>Total</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="orders-tbody">
+                            <tr>
+                                <td colspan="6" class="no-data">No orders yet</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Add/Edit Product Modal -->
+    <div id="product-modal" class="admin-modal" style="display: none;">
+        <div class="modal-overlay" onclick="closeProductModal()"></div>
+        <div class="modal-content modal-nice">
+            <div class="modal-header-nice">
+                <h3 id="modal-title"><i class="fas fa-plus"></i> Add New Product</h3>
+                <button class="modal-close-nice" onclick="closeProductModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form id="product-form" class="product-form-nice">
+                <input type="hidden" id="product-id">
+                
+                <!-- Product Image Upload -->
+                <div class="form-group-nice">
+                    <label class="label-nice">Product Image *</label>
+                    <div class="image-upload-area" id="image-upload-area">
+                        <img id="image-preview" src="" alt="" style="display: none;">
+                        <div id="upload-placeholder" class="upload-placeholder">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <p>Click to upload or drag image here</p>
+                            <span>Recommended: 800x800px, JPG or PNG</span>
+                        </div>
+                        <input type="file" id="product-image" accept="image/*" style="display: none;">
+                    </div>
+                </div>
+
+                <div class="form-row-nice">
+                    <div class="form-group-nice">
+                        <label class="label-nice">Product Name *</label>
+                        <input type="text" class="input-nice" id="product-name" required placeholder="e.g., Classic IRL T-Shirt">
+                    </div>
+                    
+                    <div class="form-group-nice">
+                        <label class="label-nice">Category *</label>
+                        <select class="input-nice" id="product-category" required>
+                            <option value="">Select Category</option>
+                            <option value="clothing">Clothing</option>
+                            <option value="accessories">Accessories</option>
+                            <option value="tech">Tech</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row-nice">
+                    <div class="form-group-nice">
+                        <label class="label-nice">Price (£) *</label>
+                        <input type="number" class="input-nice" id="product-price" step="0.01" required placeholder="29.99">
+                    </div>
+                    
+                    <div class="form-group-nice">
+                        <label class="label-nice">Stock Quantity *</label>
+                        <input type="number" class="input-nice" id="product-stock" required placeholder="100">
+                    </div>
+                </div>
+
+                <div class="form-group-nice">
+                    <label class="label-nice">Badge (Optional)</label>
+                    <select class="input-nice" id="product-badge">
+                        <option value="">No Badge</option>
+                        <option value="New">New</option>
+                        <option value="Bestseller">Bestseller</option>
+                        <option value="Popular">Popular</option>
+                        <option value="Limited">Limited Edition</option>
+                    </select>
+                </div>
+
+                <div class="form-group-nice">
+                    <label class="label-nice">Available Sizes (Optional)</label>
+                    <input type="text" class="input-nice" id="product-sizes" placeholder="S, M, L, XL, XXL">
+                    <small class="help-text">Comma-separated. Leave empty if no sizes needed.</small>
+                </div>
+
+                <div class="form-group-nice">
+                    <label class="label-nice">Available Colors (Optional)</label>
+                    <input type="text" class="input-nice" id="product-colors" placeholder="Black, White, Red">
+                    <small class="help-text">Comma-separated. Leave empty if no colors needed.</small>
+                </div>
+
+                <div class="form-group-nice">
+                    <label class="checkbox-label-nice">
+                        <input type="checkbox" id="product-status" checked>
+                        <span>In Stock (visible to customers)</span>
+                    </label>
+                </div>
+
+                <div class="form-actions-nice">
+                    <button type="button" class="btn btn-outline" onclick="closeProductModal()">
+                        <i class="fas fa-times"></i> Cancel
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Save Product
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settings-modal" class="admin-modal" style="display: none;">
+        <div class="modal-overlay" onclick="closeSettingsModal()"></div>
+        <div class="modal-content modal-nice">
+            <div class="modal-header-nice">
+                <h3><i class="fas fa-cog"></i> Site Settings</h3>
+                <button class="modal-close-nice" onclick="closeSettingsModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form id="settings-form" class="product-form-nice">
+                <div class="form-group-nice">
+                    <label class="label-nice">Channel Statistics</label>
+                    <p class="help-text" style="margin-bottom: 1rem;">Choose how to display your YouTube stats</p>
+                    
+                    <label class="checkbox-label-nice">
+                        <input type="radio" name="stats-mode" value="manual" checked>
+                        <span>Manual (Set custom numbers)</span>
+                    </label>
+                    
+                    <div id="manual-stats" style="margin-top: 1rem;">
+                        <div class="form-row-nice">
+                            <div class="form-group-nice">
+                                <label class="label-nice">Subscribers</label>
+                                <input type="number" class="input-nice" id="manual-subs" placeholder="50000">
+                            </div>
+                            <div class="form-group-nice">
+                                <label class="label-nice">Videos</label>
+                                <input type="number" class="input-nice" id="manual-videos" placeholder="200">
+                            </div>
+                        </div>
+                        <div class="form-row-nice">
+                            <div class="form-group-nice">
+                                <label class="label-nice">Views</label>
+                                <input type="number" class="input-nice" id="manual-views" placeholder="1000000">
+                            </div>
+                            <div class="form-group-nice">
+                                <label class="label-nice">Orders Shipped</label>
+                                <input type="number" class="input-nice" id="manual-orders" placeholder="1000">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-actions-nice">
+                    <button type="button" class="btn btn-outline" onclick="closeSettingsModal()">
+                        <i class="fas fa-times"></i> Cancel
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Save Settings
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/auth.js"></script>
+    <script src="js/admin.js"></script>
+</body>
+</html>
